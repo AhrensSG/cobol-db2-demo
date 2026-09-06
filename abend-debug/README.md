@@ -1,6 +1,6 @@
-# Proyecto Mes 4 — Abends (S0C7, S322) y debugging con XPEDITER
+# Abends (S0C7, S322) y debugging con XPEDITER (proyecto personal)
 
-Guión práctico del último mes del plan: **reconocer, reproducir y corregir los fallos clásicos de un proceso batch** mainframe, y depurarlo como en producción con **XPEDITER**.
+Guión práctico de autoformación: **reconocer, reproducir y corregir los fallos clásicos de un proceso batch** mainframe, y depurarlo como en producción con **XPEDITER**.
 
 ## Qué contiene
 
@@ -52,4 +52,4 @@ Proyecto personal de formación autodidacta. Demuestra el manejo práctico de lo
 
 ---
 
-*Cierra el plan de 4 meses del repo (Mes 1 `../src`, Mes 2 `../src/CTA0001.cbl` + `../db`, Mes 3 `../cics-bms`).*
+*Complementa los otros proyectos del repo: COBOL + SQL embebido (`../src` + `../db`) y CICS + BMS (`../cics-bms`).*

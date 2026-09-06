@@ -1,6 +1,6 @@
-# Proyecto Mes 3 — CICS + BMS (mini app online de cuentas)
+# CICS + BMS — mini app online de cuentas (proyecto personal)
 
-Mini aplicación **online en pantallas 3270** desarrollada con **CICS** y **BMS**, conectada a **DB2** en tiempo real. Es el Proyecto 2 del plan de formación COBOL/Mainframe: una transacción de banca con **alta / consulta / baja de cuentas** desde un terminal.
+Mini aplicación **online en pantallas 3270** desarrollada con **CICS** y **BMS**, conectada a **DB2** en tiempo real. Forma parte de mi estudio autodidacta de COBOL/Mainframe: una transacción de banca con **alta / consulta / baja de cuentas** desde un terminal.
 
 ## Qué hace
 
@@ -29,9 +29,9 @@ cics-bms/
 └── README.md
 ```
 
-La tabla `CUENTA` es la misma del proyecto del Mes 2 (`../db/DDL_CUENTA.sql`).
+La tabla `CUENTA` es la misma del proyecto principal de consulta de cuentas (`../db/DDL_CUENTA.sql`).
 
-## Conceptos del Mes 3 que cubre
+## Conceptos que cubre
 
 - **BMS**: macros `DFHMSD` / `DFHMDI` / `DFHMDF`, atributos de campo (`UNPROT`, `ASKIP`, `IC`, `BRT`), generación del **copybook simbólico** (`COPY CUST`).
 - **CICS**: `SEND MAP`, `RECEIVE MAP`, `HANDLE AID` (teclas de función), `HANDLE ABEND`, `SEND TEXT`, `RESP` para validar respuestas.
@@ -62,4 +62,4 @@ Proyecto personal de formación autodidacta en CICS/BMS. No representa experienc
 
 ---
 
-*Continúa el plan: siguiente etapa (Mes 4) es el manejo de abends (S0C7, S322) y debug con XPEDITER — ver `../abend-debug/`.*
+*Complementa el otro proyecto del repo: abends (S0C7, S322) y debug con XPEDITER — ver `../abend-debug/`.*
