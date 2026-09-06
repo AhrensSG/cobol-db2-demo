@@ -1,58 +1,67 @@
-# COBOL + DB2 — Proyecto de demostración (consulta de cuentas)
+# COBOL + DB2 — Consulta de cuentas (proyecto personal)
 
-Proyecto de **autoaprendizaje** del mejor plan de estudio COBOL + Mainframe.
-Demuestra trabajo con IBM Enterprise COBOL y SQL embebido en DB2 para z/OS.
+Programa en **IBM Enterprise COBOL** con **SQL embebido en DB2** que consulta los saldos de cuentas bancarias usando un cursor, maneja `SQLCODE` (encontrado / no encontrado / error) y lee/escribe ficheros secuenciales con su JCL de compilación y ejecución.
 
-> **Aviso honesto:** este es un proyecto de aprendizaje. **No** representa
-> experiencia laboral previa en entornos COBOL/Mainframe ni en banca.
-> Las ofertas de Second Window y Aubay exigen 4–5 años **reales** de
-> experiencia bancaria legacy (BBVA/DB2/CICS) que este código no sustituye.
-> Úsalo como demostración de iniciativa para consultoras que contratan
-> perfiles junior COBOL en formación.
+Este repositorio es el resultado de mi formación autodidacta en el stack mainframe (COBOL, DB2, JCL y, en camino, CICS).
 
-## Qué hace
+## Por qué estoy aprendiendo COBOL
 
-Programa `CTA0001` que:
+Soy desarrollador backend con experiencia en **TypeScript, Node.js y NestJS** (microservicios, APIs REST/GraphQL, PostgreSQL, testing). Decidí sumar COBOL/mainframe a mi perfil por dos razones:
 
-1. Lee números de cuenta desde un fichero de entrada (`SYSIN`).
-2. Para cada cuenta ejecuta un `SELECT` con SQL embebido (DB2) usando un cursor.
-3. Distingue por `SQLCODE` si la cuenta **existe** (0), **no existe** (100) o hay un **error** (otro).
-4. Escribe el resultado en un fichero de salida y controla abends.
+1. **Demanda real**: consultoras y banca (BBVA, entidades similares) buscan de forma constante perfiles junior en formación para sostener y modernizar sistemas legacy. Son posiciones con sueldo competitivo, estabilidad y oportunidades de migración a stack moderno.
+2. **Aprendizaje de base**: tocar COBOL y SQL embebido me está haciendo mejor ingeniero — me obliga a pensar en precisión de datos, layout de registros, control de condiciones y procesos por lotes de una manera que no aparece en el mundo web.
 
-Cubre los conceptos base del plan:
-- Divisiones COBOL (`IDENTIFICATION`, `ENVIRONMENT`, `DATA`, `PROCEDURE`).
-- `COPY` de copybook (`CUENTA.INC`).
-- Manejo de ficheros secuenciales (SELECT, FD, OPEN/READ/WRITE/CLOSE).
-- SQL embebido en DB2: `DECLARE CURSOR`, `OPEN`, `FETCH`, `CLOSE`, `SQLCA`, `SQLCODE`.
-- JCL de compilación/ejecución con `IGYCRCTL` + `IEWL` y `IKJEFT01`/`DSN`.
+No presento esto como experiencia laboral en banca: es un **proyecto personal de aprendizaje** que demuestra iniciativa y que cuento con la base para crecer dentro de un equipo mainframe.
+
+## Mi experiencia con COBOL hasta ahora
+
+Estoy siguiendo un plan de 4 meses. Lo que llevo hecho y lo que me toca:
+
+- [x] **Mes 1 — COBOL base + JCL**
+  Divisiones del lenguaje, `PIC`, trabajo con ficheros secuenciales, `COPY` de copybooks y JCL de compilación/ejecución.
+- [x] **Mes 2 — SQL embebido en DB2**
+  Este repositorio. `DECLARE CURSOR`, `OPEN`/`FETCH`/`CLOSE`, comunicación con DB2 vía `SQLCA` y manejo de resultados por `SQLCODE`.
+- [ ] **Mes 3 — CICS + BMS** *(en curso)*
+  Transacción online de consulta en pantalla 3270 con maps BMS.
+- [ ] **Mes 3/4 — Abends y debugging**
+  Control de interrupciones como `S0C7`/`S322` y depuración con XPEDITER.
+
+Lo que más me está aportando esta experiencia: leer un registro como bytes con una máscara exacta, validar cada condición de retorno de SQL y entender el flujo completo de compilación → linkeo → ejecución en z/OS.
+
+## Qué hace este programa
+
+Un programa de ejemplo (`CTA0001`) que:
+
+1. Lee números de cuenta desde un fichero de entrada.
+2. Para cada cuenta ejecuta un `SELECT` con SQL embebido en DB2 usando un cursor.
+3. Distingue si la cuenta **existe** (`SQLCODE 0`), **no existe** (`SQLCODE 100`) o hay un **error**.
+4. Escribe los resultados en un fichero de salida y controla terminación anormal (abend).
+
+Cubre: copybooks con `COPY CUENTA`, ficheros secuenciales (`OPEN`/`READ`/`WRITE`/`CLOSE`), SQL embebido con `SQLCA`/`SQLCODE`, y JCL completo (`IGYCRCTL` + `IEWL` para compilar, `IKJEFT01`/`DSN` para ejecutar).
 
 ## Estructura
 
 ```
-cobol-demo/
 ├── copybook/
-│   └── CUENTA.INC        # Definición de estructura de la cuenta
+│   └── CUENTA.INC        # Definición de estructura de la cuenta (copybook)
 ├── db/
-│   └── DDL_CUENTA.sql    # Creación e inserción de la tabla CUENTA (DB2)
+│   └── DDL_CUENTA.sql    # Creación de la tabla CUENTA + datos de prueba (DB2)
 ├── jcl/
-│   ├── CMPL01.jcl        # Compila + linka (IGYCRCTL + IEWL)
-│   ├── RUN01.jcl         # Ejecuta en DB2 (IKJEFT01 + DSN)
+│   ├── CMPL01.jcl        # Compilación + linkeo (IGYCRCTL + IEWL)
+│   ├── RUN01.jcl         # Ejecución en DB2 (IKJEFT01 + DSN)
 │   └── entrada.txt       # Números de cuenta de prueba
 └── src/
-    └── CTA0001.cbl       # Programa principal
+    └── CTA0001.cbl       # Programa principal en COBOL
 ```
 
 ## Cómo ejecutarlo
 
-Requisitos: entorno IBM Enterprise COBOL + DB2 for z/OS (p. ej. **IBM Z Xplore**, gratuito).
+Requisitos: un entorno IBM Enterprise COBOL + DB2 for z/OS. La vía más accesible es **IBM Z Xplore** (gratuito).
 
-1. Crea la tabla e inserta datos:
-   ```sql
-   -- Ejecutar DDL_CUENTA.sql en el subsistema DB2
-   ```
-2. Pon el copybook en `MILLER.COBOL.COPYLIB` y el fuente en `MILLER.COBOL.SRC(CTA0001)`.
-3. Compila y linka con `CMPL01.jcl`.
-4. Ejecuta con `RUN01.jcl` (se invoca el plan `CTA0001PLAN`).
+1. Crear la tabla e insertar los datos: ejecutar `db/DDL_CUENTA.sql` en el subsistema DB2.
+2. Colocar el fuente en la librería de fuentes y el copybook en la copylib de tu usuario (ajusta los nombres de `MILLER.*` en los JCL a tu TSO ID).
+3. Compilar y linkear con `jcl/CMPL01.jcl`.
+4. Ejecutar con `jcl/RUN01.jcl` (usa el plan `CTA0001PLAN`).
 5. Salida esperada en `SALIDA`:
 
 ```
@@ -62,14 +71,10 @@ CUENTA: ES91 2100 0418 4502 0005 1332 | TITULAR: LUCAS FERNANDEZ GIL | SALDO: +0
 CUENTA NO ENCONTRADA
 ```
 
-## Siguientes pasos del plan (roadmap)
+## Sobre mí
 
-- [x] Mes 1: COBOL base (divisiones, PIC, ficheros, COPY) + JCL
-- [x] Mes 2: SQL embebido DB2, cursors, SQLCODE → **este proyecto**
-- [ ] Mes 3: CICS + BMS maps (transacción online de consulta en pantalla 3270)
-- [ ] Mes 3/4: manejo de abends (S0C7, S322), debug con XPEDITER
+**Guillermo Ahrens** — Desarrollador backend (TypeScript, Node.js, NestJS, Next.js) ampliando su perfil hacia el ecosistema mainframe.
 
-## Autor
-
-Guillermo Ahrens — proyecto personal de formación en stack legacy (COBOL/DB2/Mainframe).
-Ver blog/portfolio en https://grupo-start.vercel.app/portfolio
+- Portfolio: https://gahrens-portfolio.vercel.app
+- GitHub: https://github.com/AhrensSG
+- Email: guillermoahrens@gmail.com
