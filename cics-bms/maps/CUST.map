@@ -1,0 +1,43 @@
+*-----------------------------------------------------------------
+* BMS MAPSET: CUST   -   MAP: M1
+*
+* Proyecto Mes 3 (CICS + BMS): mini aplicación online de cuentas.
+* Pantalla 3270 para dar de alta / consultar / dar de baja cuentas
+* en DB2 desde un terminal.
+*
+* Ensamblar con ASMA90:
+*   - Genera el load module del mapset (se linkea a la LOADLIB)
+*   - Genera el copybook simbólico CUST para el COBOL (SYSPUNCH)
+*
+* Formato del mapa (líneas sobre 3270 de 80x24):
+*   L1  Cabecera de la aplicación
+*   L2  Ayuda de teclas de función
+*   L4  NUMERO CUENTA: [M1ACCO]        <- entrada (con cursor)
+*   L6  TITULAR:      [M1TITO]         <- salida (consulta) / entrada (alta)
+*   L8  SALDO:        [M1SALO]         <- salida
+*   L10 DIVISA:       [M1DIVI]         <- salida
+*   L12 [M1ERROR]                       <- mensajes de resultado
+*-----------------------------------------------------------------
+CUST    DFHMSD TYPE=MAP,MODE=INOUT,LANG=COBOL,CTRL=FREEKB,STORAGE=AUTO
+        TITLE 'PROYECTO CICS - CUENTAS ONLINE'
+M1      DFHMDI SIZE=(14,70),LINE=1,COLUMN=1
+*
+HEADS   DFHMDF POS=(1,1),LENGTH=55,ATTRB=ASKIP,INITIAL='BANCA PRUEBA - ALTAS / CONSULTAS / BAJAS DE CUENTAS'
+HINT1   DFHMDF POS=(2,1),LENGTH=55,ATTRB=ASKIP,INITIAL='PF2=ALTA  PF3=BAJA  PF4=CONSULTA  (ACA NUM CUENTA + ENTER)'
+*
+ACCLBL  DFHMDF POS=(4,1),LENGTH=16,ATTRB=ASKIP,INITIAL='NUMERO CUENTA:'
+ACCO    DFHMDF POS=(4,18),LENGTH=24,ATTRB=(UNPROT,IC)
+*
+TITLBL  DFHMDF POS=(6,1),LENGTH=9,ATTRB=ASKIP,INITIAL='TITULAR:'
+TITO    DFHMDF POS=(6,18),LENGTH=40,ATTRB=UNPROT
+*
+SALLBL  DFHMDF POS=(8,1),LENGTH=7,ATTRB=ASKIP,INITIAL='SALDO:'
+SALO    DFHMDF POS=(8,18),LENGTH=20,ATTRB=ASKIP
+*
+DIVLBL  DFHMDF POS=(10,1),LENGTH=8,ATTRB=ASKIP,INITIAL='DIVISA:'
+DIVI    DFHMDF POS=(10,18),LENGTH=4,ATTRB=ASKIP
+*
+ERRORO  DFHMDF POS=(12,1),LENGTH=52,ATTRB=(ASKIP,BRT)
+*
+        DFHMSD TYPE=FINAL
+        END

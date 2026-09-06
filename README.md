@@ -1,8 +1,8 @@
-# COBOL + DB2 — Consulta de cuentas (proyecto personal)
+# COBOL + Mainframe — proyecto personal de formación
 
-Programa en **IBM Enterprise COBOL** con **SQL embebido en DB2** que consulta los saldos de cuentas bancarias usando un cursor, maneja `SQLCODE` (encontrado / no encontrado / error) y lee/escribe ficheros secuenciales con su JCL de compilación y ejecución.
+Tres proyectos de un plan de 4 meses en el stack mainframe: **COBOL + SQL embebido en DB2**, **CICS + BMS** (transacciones online en pantallas 3270) y **abends + debugging con XPEDITER**.
 
-Este repositorio es el resultado de mi formación autodidacta en el stack mainframe (COBOL, DB2, JCL y, en camino, CICS).
+El proyecto principal (raíz del repo) es un programa en **IBM Enterprise COBOL** con **SQL embebido en DB2** que consulta los saldos de cuentas bancarias usando un cursor, maneja `SQLCODE` (encontrado / no encontrado / error) y lee/escribe ficheros secuenciales con su JCL de compilación y ejecución.
 
 ## Por qué estoy aprendiendo COBOL
 
@@ -21,10 +21,10 @@ Estoy siguiendo un plan de 4 meses. Lo que llevo hecho y lo que me toca:
   Divisiones del lenguaje, `PIC`, trabajo con ficheros secuenciales, `COPY` de copybooks y JCL de compilación/ejecución.
 - [x] **Mes 2 — SQL embebido en DB2**
   Este repositorio. `DECLARE CURSOR`, `OPEN`/`FETCH`/`CLOSE`, comunicación con DB2 vía `SQLCA` y manejo de resultados por `SQLCODE`.
-- [ ] **Mes 3 — CICS + BMS** *(en curso)*
-  Transacción online de consulta en pantalla 3270 con maps BMS.
-- [ ] **Mes 3/4 — Abends y debugging**
-  Control de interrupciones como `S0C7`/`S322` y depuración con XPEDITER.
+- [x] **Mes 3 — CICS + BMS**
+  Mini aplicación online de cuentas (alta/consulta/baja) en pantallas 3270 con maps BMS — ver `cics-bms/`.
+- [x] **Mes 4 — Abends y debugging**
+  Reproducción y corrección de `S0C7`/`S322` y depuración con XPEDITER — ver `abend-debug/`.
 
 Lo que más me está aportando esta experiencia: leer un registro como bytes con una máscara exacta, validar cada condición de retorno de SQL y entender el flujo completo de compilación → linkeo → ejecución en z/OS.
 
@@ -41,18 +41,25 @@ Cubre: copybooks con `COPY CUENTA`, ficheros secuenciales (`OPEN`/`READ`/`WRITE`
 
 ## Estructura
 
+El repo contiene los **tres proyectos del plan**:
+
 ```
-├── copybook/
-│   └── CUENTA.INC        # Definición de estructura de la cuenta (copybook)
-├── db/
-│   └── DDL_CUENTA.sql    # Creación de la tabla CUENTA + datos de prueba (DB2)
-├── jcl/
-│   ├── CMPL01.jcl        # Compilación + linkeo (IGYCRCTL + IEWL)
-│   ├── RUN01.jcl         # Ejecución en DB2 (IKJEFT01 + DSN)
-│   └── entrada.txt       # Números de cuenta de prueba
-└── src/
-    └── CTA0001.cbl       # Programa principal en COBOL
+├── src/                  # Mes 2 — COBOL + SQL embebido DB2 (consulta de cuentas)
+│   ├── copybook/
+│   │   └── CUENTA.INC        # Copybook de la cuenta
+│   ├── db/
+│   │   └── DDL_CUENTA.sql    # Creación de la tabla CUENTA + datos (DB2)
+│   ├── jcl/
+│   │   ├── CMPL01.jcl        # Compilación + linkeo (IGYCRCTL + IEWL)
+│   │   ├── RUN01.jcl         # Ejecución en DB2 (IKJEFT01 + DSN)
+│   │   └── entrada.txt       # Números de cuenta de prueba
+│   └── src/
+│       └── CTA0001.cbl       # Programa principal en COBOL
+├── cics-bms/             # Mes 3 — CICS + BMS (aplicación online 3270)
+└── abend-debug/          # Mes 4 — Abends (S0C7, S322) + debugging XPEDITER
 ```
+
+Cada proyecto tiene su propio README con la explicación y cómo desplegarlo/ejecutarlo.
 
 ## Cómo ejecutarlo
 
