@@ -1,4 +1,4 @@
-# COBOL + DB2 — Proyecto de demostración (consulta de cuentas)
+# COBOL + DB2 — Proyecto (consulta de cuentas)
 
 Proyecto de **autoaprendizaje** del mejor plan de estudio COBOL + Mainframe.
 Demuestra trabajo con IBM Enterprise COBOL y SQL embebido en DB2 para z/OS.
