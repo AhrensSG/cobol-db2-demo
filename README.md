@@ -3,13 +3,6 @@
 Proyecto de **autoaprendizaje** del mejor plan de estudio COBOL + Mainframe.
 Demuestra trabajo con IBM Enterprise COBOL y SQL embebido en DB2 para z/OS.
 
-> **Aviso honesto:** este es un proyecto de aprendizaje. **No** representa
-> experiencia laboral previa en entornos COBOL/Mainframe ni en banca.
-> Las ofertas de Second Window y Aubay exigen 4–5 años **reales** de
-> experiencia bancaria legacy (BBVA/DB2/CICS) que este código no sustituye.
-> Úsalo como demostración de iniciativa para consultoras que contratan
-> perfiles junior COBOL en formación.
-
 ## Qué hace
 
 Programa `CTA0001` que:
